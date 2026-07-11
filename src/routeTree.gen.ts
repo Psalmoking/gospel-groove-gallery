@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as GenresRouteImport } from './routes/genres'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrackIdRouteImport } from './routes/track.$id'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GenresRoute = GenresRouteImport.update({
   id: '/genres',
   path: '/genres',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/genres': typeof GenresRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/track/$id': typeof TrackIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/genres': typeof GenresRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/track/$id': typeof TrackIdRoute
 }
 export interface FileRoutesById {
@@ -52,25 +60,34 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/genres': typeof GenresRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/track/$id': typeof TrackIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/genres' | '/track/$id'
+  fullPaths: '/' | '/about' | '/genres' | '/sitemap.xml' | '/track/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/genres' | '/track/$id'
-  id: '__root__' | '/' | '/about' | '/genres' | '/track/$id'
+  to: '/' | '/about' | '/genres' | '/sitemap.xml' | '/track/$id'
+  id: '__root__' | '/' | '/about' | '/genres' | '/sitemap.xml' | '/track/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   GenresRoute: typeof GenresRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TrackIdRoute: typeof TrackIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/genres': {
       id: '/genres'
       path: '/genres'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   GenresRoute: GenresRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TrackIdRoute: TrackIdRoute,
 }
 export const routeTree = rootRouteImport
