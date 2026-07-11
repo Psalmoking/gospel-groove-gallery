@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as GenresRouteImport } from './routes/genres'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrackIdRouteImport } from './routes/track.$id'
 
+const GenresRoute = GenresRouteImport.update({
+  id: '/genres',
+  path: '/genres',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -25,32 +31,43 @@ const TrackIdRoute = TrackIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/genres': typeof GenresRoute
   '/track/$id': typeof TrackIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/genres': typeof GenresRoute
   '/track/$id': typeof TrackIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/genres': typeof GenresRoute
   '/track/$id': typeof TrackIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/track/$id'
+  fullPaths: '/' | '/genres' | '/track/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/track/$id'
-  id: '__root__' | '/' | '/track/$id'
+  to: '/' | '/genres' | '/track/$id'
+  id: '__root__' | '/' | '/genres' | '/track/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GenresRoute: typeof GenresRoute
   TrackIdRoute: typeof TrackIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/genres': {
+      id: '/genres'
+      path: '/genres'
+      fullPath: '/genres'
+      preLoaderRoute: typeof GenresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GenresRoute: GenresRoute,
   TrackIdRoute: TrackIdRoute,
 }
 export const routeTree = rootRouteImport
