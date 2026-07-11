@@ -6,12 +6,17 @@ import { TrackCard } from "@/components/track-card";
 import { fetchSearch, GENRES, type Track } from "@/lib/tracks";
 
 export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    q: typeof search.q === "string" ? search.q : undefined,
+    genre: typeof search.genre === "string" ? search.genre : undefined,
+  }),
   component: HomePage,
 });
 
 function HomePage() {
-  const [query, setQuery] = useState("");
-  const [genre, setGenre] = useState<string>("all");
+  const initial = Route.useSearch();
+  const [query, setQuery] = useState(initial.q ?? "");
+  const [genre, setGenre] = useState<string>(initial.genre ?? "all");
   const [results, setResults] = useState<Track[]>([]);
   const [loading, setLoading] = useState(true);
 
