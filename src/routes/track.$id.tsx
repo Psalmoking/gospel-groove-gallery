@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-rout
 import { ArrowLeft, CalendarDays, Clock3, Disc3, Music2, User2 } from "lucide-react";
 import { SiteFooter, SiteHeader } from "@/components/site-header";
 import { TrackCard } from "@/components/track-card";
-import { getTrack, relatedTracks } from "@/lib/tracks";
+import { getTrack, relatedTracks, type Track } from "@/lib/tracks";
 
 export const Route = createFileRoute("/track/$id")({
   loader: ({ params }) => {
@@ -163,7 +163,7 @@ function TrackDetailsPage() {
             </div>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {related.map((t) => (
+            {related.map((t: Track) => (
               <TrackCard key={t.id} track={t} />
             ))}
           </div>
