@@ -8,7 +8,8 @@ export const Route = createFileRoute("/track/$id")({
   loader: ({ params }) => {
     const track = getTrack(Number(params.id));
     if (!track) throw notFound();
-    return { track: track, related: relatedTracks(track) };
+    const rel = relatedTracks(track);
+    return { track, related: rel };
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
